@@ -258,7 +258,7 @@ tests.each do |test|
 
   begin
     re = RRE2.new(k)
-    ps = re._program_size
+    ps = re.program_size
     ret = re.match(v)
   rescue Exception => e
     puts "internal failure: #{e}"
