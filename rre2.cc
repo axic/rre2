@@ -177,6 +177,13 @@ rre2_inspect(VALUE self)
 }
 
 extern "C" static VALUE
+rre2_escape(VALUE self, VALUE rpattern)
+{
+	char *pattern = StringValuePtr(rpattern);
+	return rb_str_new2(RE2::QuoteMeta(pattern).data());
+}
+
+extern "C" static VALUE
 rre2_program_size(VALUE self)
 {
 	RE2 *re_obj = (RE2 *)DATA_PTR(self);
@@ -193,6 +200,9 @@ Init_rre2()
     rb_define_method(rb_cRRE2, "to_s", (VALUE (*)(...))rre2_inspect, 0);
     rb_define_method(rb_cRRE2, "inspect", (VALUE (*)(...))rre2_inspect, 0);
     rb_define_method(rb_cRRE2, "source", (VALUE (*)(...))rre2_inspect, 0);
+
+	rb_define_singleton_method(rb_cRRE2, "escape", (VALUE (*)(...))rre2_escape, 1);
+	rb_define_singleton_method(rb_cRRE2, "quote", (VALUE (*)(...))rre2_escape, 1);
 
 	rb_define_method(rb_cRRE2, "program_size", (VALUE (*)(...))rre2_program_size, 0);
 
