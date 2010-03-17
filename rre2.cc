@@ -190,16 +190,37 @@ rre2_program_size(VALUE self)
 	return rb_int_new(re_obj->ProgramSize());
 }
 
+extern "C" static VALUE
+rre2_gsub(VALUE self, VALUE rinput, VALUE rpattern, VALUE rvalue)
+{
+	VALUE ret;
+	char *input = StringValuePtr(rinput), *pattern = StringValuePtr(rpattern),
+		*value = StringValuePtr(rvalue);
+
+//	printf("gsub input=%s pattern=%s value=%s\n", input, pattern, value);
+
+	// FIXME: memory handling
+	std::string buf(input);
+
+	// FIXME: number of changes never used
+	RE2::GlobalReplace(&buf, pattern, StringPiece(value));
+	return rb_str_new2(buf.data());
+}
+
 extern "C" void
 Init_rre2()
 {
 	rb_cRRE2 = rb_define_class("RRE2", rb_cObject);
 	rb_define_alloc_func(rb_cRRE2, rre2_alloc);
 	rb_define_method(rb_cRRE2, "initialize", (VALUE (*)(...))rre2_init, 1);
-    rb_define_method(rb_cRRE2, "match", (VALUE (*)(...))rre2_match, -1);
-    rb_define_method(rb_cRRE2, "to_s", (VALUE (*)(...))rre2_inspect, 0);
-    rb_define_method(rb_cRRE2, "inspect", (VALUE (*)(...))rre2_inspect, 0);
-    rb_define_method(rb_cRRE2, "source", (VALUE (*)(...))rre2_inspect, 0);
+	rb_define_method(rb_cRRE2, "match", (VALUE (*)(...))rre2_match, -1);
+	//rb_define_method(rb_cRRE2, "match", (VALUE (*)(...))rre2_scan, -1);
+
+	rb_define_singleton_method(rb_cRRE2, "gsub", (VALUE (*)(...))rre2_gsub, 3);
+
+	rb_define_method(rb_cRRE2, "to_s", (VALUE (*)(...))rre2_inspect, 0);
+	rb_define_method(rb_cRRE2, "inspect", (VALUE (*)(...))rre2_inspect, 0);
+	rb_define_method(rb_cRRE2, "source", (VALUE (*)(...))rre2_inspect, 0);
 
 	rb_define_singleton_method(rb_cRRE2, "escape", (VALUE (*)(...))rre2_escape, 1);
 	rb_define_singleton_method(rb_cRRE2, "quote", (VALUE (*)(...))rre2_escape, 1);

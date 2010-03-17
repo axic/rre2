@@ -1,6 +1,6 @@
 require 'rre2'
 
-data = "This <should not, and <this shouldn't $ be selected, but <this should be> <or this>."
+data = "This <should not, and <this shouldn't $ be selected, but <this should be> or <this>."
 exp = /<[^$<>]*>/
 
 test = Regexp.new(exp)
@@ -26,3 +26,5 @@ puts test.match(data).inspect
 
 #puts RRE2.new("\w+").scan("This will be splitted").inspect
 puts RRE2.new("[^ ]*").match("This will be splitted").inspect
+
+puts RRE2.gsub(data, "<[^$<>]*>", "LOL")
