@@ -1,0 +1,6 @@
+COPYING
+MANIFEST
+README
+extconf.rb
+rre2.cc
+test.rb

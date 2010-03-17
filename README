@@ -1,0 +1,22 @@
+RRE2 - Ruby RE2 binding
+-----------------------
+
+Today (16/03/2010) Google released its regular expression library RE2 to
+the public under a BSD license. It is written in C++ and is available at
+http://code.google.com/p/re2/.
+
+This library is a Ruby binding to it and aiming to be compatible with the
+built in Ruby Regexp class, however only the very basics are implemented.
+The implementation was heavily influenced by pyre2
+(http://github.com/facebook/pyre2).
+
+NOTE: This is a very early stage code of bad quality and is just an
+experiment of how this can be done. It happens to work with the supplied
+test.rb on one computer. It is not supposed to be used for any productive
+work.
+
+To compile either install the gem, or run the following:
+ruby extconf.rb
+make
+
+It expects that the RE2 library is installed and is available on the path.
