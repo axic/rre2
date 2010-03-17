@@ -97,7 +97,7 @@ rre2_init(VALUE self, VALUE rpattern)
 #endif
 
 	if (re_obj == NULL)
-		rb_raise(rb_eRuntimeError, "failed to initialize RE2");
+		rb_raise(rb_eNoMemError, "failed to allocate memory for RE2");
 
 	if (!re_obj->ok()) {
 		long code = (long)re_obj->error_code();
@@ -129,7 +129,7 @@ rre2_match(int argc, VALUE *argv, VALUE self)
     groups = new(nothrow) StringPiece[n_groups];
 
 	if (groups == NULL)
-		rb_raise(rb_eNoMemError, "failed to init RRE2MatchData");
+		rb_raise(rb_eNoMemError, "failed to allocate memory for RRE2MatchData");
 
 	// FIXME: should not be using StringValuePtr
 	data = StringValuePtr(str);
