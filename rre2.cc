@@ -176,6 +176,13 @@ rre2_inspect(VALUE self)
 	return rb_str_new2(msg.data());
 }
 
+extern "C" static VALUE
+rre2_program_size(VALUE self)
+{
+	RE2 *re_obj = (RE2 *)DATA_PTR(self);
+	return rb_int_new(re_obj->ProgramSize());
+}
+
 extern "C" void
 Init_rre2()
 {
@@ -186,6 +193,8 @@ Init_rre2()
     rb_define_method(rb_cRRE2, "to_s", (VALUE (*)(...))rre2_inspect, 0);
     rb_define_method(rb_cRRE2, "inspect", (VALUE (*)(...))rre2_inspect, 0);
     rb_define_method(rb_cRRE2, "source", (VALUE (*)(...))rre2_inspect, 0);
+
+	rb_define_method(rb_cRRE2, "program_size", (VALUE (*)(...))rre2_program_size, 0);
 
 	rb_cRRE2MatchData = rb_define_class("RRE2MatchData", rb_cObject);
 	rb_define_alloc_func(rb_cRRE2MatchData, rre2_matchdata_alloc);
